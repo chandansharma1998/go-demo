@@ -44,7 +44,7 @@ pipeline {
 
         stage('Promote') {
             steps {
-                bat 'kubectl argo rollouts promote demo-app'
+                bat 'kubectl-argo-rollouts promote demo-app'
             }
         }
     }
@@ -52,7 +52,7 @@ pipeline {
     post {
         failure {
             echo 'Rolling back...'
-            bat 'kubectl argo rollouts undo demo-app'
+            bat 'kubectl-argo-rollouts undo demo-app'
         }
     }
 }
