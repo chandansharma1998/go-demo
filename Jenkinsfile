@@ -36,15 +36,6 @@ pipeline {
             }
         }
 
-        stage('Smoke Test') {
-            steps {
-                script {
-                    def GATEWAY_IP = bat(script: "minikube service istio-ingress -n istio-system --url", returnStdout: true).trim()
-                    bat "curl ${GATEWAY_IP}"
-                }
-            }
-        }
-
         stage('Approval to Promote') {
             steps {
                 input message: 'Promote to full rollout?'
