@@ -47,6 +47,12 @@ pipeline {
                 bat 'kubectl-argo-rollouts promote demo-app'
             }
         }
+
+        stage('Promote Canary to Stable') {
+            steps {
+                bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote demo-app'
+            }
+        }
     }
 
     post {
