@@ -28,9 +28,11 @@ pipeline {
 
         stage('Deploy Canary') {
             steps {
-                sh 'kubectl apply -f rollout.yaml'
-                sh 'kubectl apply -f service.yaml'
-                sh 'kubectl apply -f virtualservice.yaml'
+                bat '''
+                    kubectl apply -f rollout.yaml
+                    kubectl apply -f service.yaml
+                    kubectl apply -f virtualservice.yaml
+                '''
             }
         }
 
@@ -38,7 +40,7 @@ pipeline {
             steps {
                 script {
                     def GATEWAY_IP = sh(script: "minikube service istio-ingress -n istio-system --url", returnStdout: true).trim()
-                    sh "curl ${GATEWAY_IP}"
+                    bat "curl ${GATEWAY_IP}"
                 }
             }
         }
@@ -51,7 +53,7 @@ pipeline {
 
         stage('Promote') {
             steps {
-                sh 'kubectl argo rollouts promote demo-app'
+                bat 'kubectl argo rollouts promote demo-app'
             }
         }
     }
@@ -59,7 +61,7 @@ pipeline {
     post {
         failure {
             echo 'Rolling back...'
-            sh 'kubectl argo rollouts undo demo-app'
+            bat 'kubectl argo rollouts undo demo-app'
         }
     }
 }
