@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'go-test'
+        IMAGE_NAME = 'go-demo'
         DOCKERHUB_USER = 'sharmachandan487'
     }
 
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Promote Canary to Stable') {
             steps {
-                bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote demo-app'
+                bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote go-demo'
             }
         }
     }
@@ -52,7 +52,7 @@ pipeline {
     post {
         failure {
             echo 'Rolling back...'
-            bat 'kubectl-argo-rollouts undo demo-app'
+            bat 'kubectl-argo-rollouts undo go-demo'
         }
     }
 }

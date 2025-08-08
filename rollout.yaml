@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: demo-app
+  name: go-demo
 spec:
   replicas: 3
   strategy:
@@ -14,11 +14,11 @@ spec:
         - setWeight: 100
   selector:
     matchLabels:
-      app: demo-app
+      app: go-demo
   template:
     metadata:
       labels:
-        app: demo-app
+        app: go-demo
     spec:
       containers:
         - name: app
