@@ -19,8 +19,8 @@ pipeline {
                     bat '''
                         docker --version
                         docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
-                        docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:%BUILD_NUMBER% .
-                        docker push %DOCKERHUB_USER%/%IMAGE_NAME%:%BUILD_NUMBER%
+                        docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:latest .
+                        docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
                     '''
                 }
             }
