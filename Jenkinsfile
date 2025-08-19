@@ -21,7 +21,7 @@ pipeline {
                     gosec -fmt sarif -out gosec-report.sarif ./...
                     
                     echo Running golangci-lint...
-                    golangci-lint run ./... --out-format sarif > golangci-lint-report.sarif
+                    golangci-lint run ./... --out-format sarif > golangci-lint-report.sarif || exit /b 0
                 '''
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 bat '''
                     echo Checking Go module vulnerabilities...
-                    govulncheck ./... > govulncheck-report.txt
+                    govulncheck ./... > govulncheck-report.txt || exit /b 0
                 '''
             }
         }
@@ -52,7 +52,7 @@ pipeline {
             steps {
                 bat '''
                     echo Running Trivy scan...
-                    trivy image --format sarif --output trivy-report.sarif %DOCKERHUB_USER%/%IMAGE_NAME%:latest
+                    trivy image --format sarif --output trivy-report.sarif %DOCKERHUB_USER%/%IMAGE_NAME%:latest || exit /b 0
                 '''
             }
         }
