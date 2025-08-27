@@ -73,16 +73,7 @@ pipeline {
             }
         }
 
-        // First pause → after 20%
-        stage('Approval to 60%') {
-            steps {
-                input message: 'Promote rollout to 60% traffic?'
-                bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote go-demo'
-            }
-        }
-
-        // Second pause → after 60%
-        stage('Approval to 100%') {
+        stage('Approval to promote') {
             steps {
                 input message: 'Promote rollout to 100% (stable)?'
                 bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote go-demo'
