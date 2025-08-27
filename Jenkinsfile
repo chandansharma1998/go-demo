@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'go-demo'
         DOCKERHUB_USER = 'sharmachandan487'
+        VERSION = "v${env.BUILD_NUMBER}"   // unique image tag per build
     }
 
     stages {
@@ -41,8 +42,8 @@ pipeline {
                     bat '''
                         docker --version
                         docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
-                        docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:latest .
-                        docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
+                        docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:%VERSION% .
+                        docker push %DOCKERHUB_USER%/%IMAGE_NAME%:%VERSION%
                     '''
                 }
             }
@@ -52,7 +53,7 @@ pipeline {
             steps {
                 bat '''
                     echo Running Trivy scan...
-                    trivy image --format sarif --output trivy-report.sarif %DOCKERHUB_USER%/%IMAGE_NAME%:latest || exit /b 0
+                    trivy image --format sarif --output trivy-report.sarif %DOCKERHUB_USER%/%IMAGE_NAME%:%VERSION% || exit /b 0
                 '''
             }
         }
@@ -63,10 +64,12 @@ pipeline {
             }
         }
 
-        stage('Deploy Canary (start rollout)') {
+        stage('Deploy Canary (20%)') {
             steps {
                 bat '''
-                    kubectl apply -f rollout.yaml
+                    set VERSION=%VERSION%
+                    powershell -Command "(Get-Content rollout.yaml) -replace '\\$\\{VERSION\\}', '%VERSION%' | Set-Content rollout-temp.yaml"
+                    kubectl apply -f rollout-temp.yaml
                     kubectl apply -f service.yaml
                     kubectl apply -f virtualservice.yaml
                 '''

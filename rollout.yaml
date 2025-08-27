@@ -9,21 +9,18 @@ spec:
       app: go-demo
   strategy:
     canary:
-      canaryService: go-demo-canary   # Canary service
-      stableService: go-demo          # Stable service
+      canaryService: go-demo-canary
+      stableService: go-demo
       steps:
         - setWeight: 20
-        - pause: {}                   # Pause indefinitely (wait for Jenkins approval)
+        - pause: {}   # pause indefinitely
   template:
     metadata:
       labels:
         app: go-demo
     spec:
       containers:
-        - name: app
-          image: sharmachandan487/go-demo:latest
-          ports:
-            - containerPort: 8085
-          env:
-            - name: VERSION
-              value: "v1"
+      - name: app
+        image: sharmachandan487/go-demo:${VERSION}   # 🔹 dynamically injected
+        ports:
+        - containerPort: 8085
