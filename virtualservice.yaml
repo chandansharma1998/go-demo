@@ -1,4 +1,4 @@
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: go-demo
@@ -6,14 +6,12 @@ spec:
   hosts:
     - "*"
   gateways:
-    - istio-system/istio-ingress
+    - go-demo-gateway
   http:
     - route:
         - destination:
             host: go-demo
-            subset: stable
-          weight: 80
+          weight: 100
         - destination:
-            host: go-demo
-            subset: canary
-          weight: 20
+            host: go-demo-canary
+          weight: 0
