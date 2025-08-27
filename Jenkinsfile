@@ -63,7 +63,7 @@ pipeline {
             }
         }
 
-        stage('Deploy Canary') {
+        stage('Deploy Canary (start rollout)') {
             steps {
                 bat '''
                     kubectl apply -f rollout.yaml
@@ -73,14 +73,18 @@ pipeline {
             }
         }
 
-        stage('Approval to Promote') {
+        // First pause → after 20%
+        stage('Approval to 60%') {
             steps {
-                input message: 'Promote to full rollout?'
+                input message: 'Promote rollout to 60% traffic?'
+                bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote go-demo'
             }
         }
 
-        stage('Promote Canary to Stable') {
+        // Second pause → after 60%
+        stage('Approval to 100%') {
             steps {
+                input message: 'Promote rollout to 100% (stable)?'
                 bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" promote go-demo'
             }
         }
