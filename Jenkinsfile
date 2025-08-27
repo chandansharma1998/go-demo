@@ -88,9 +88,9 @@ pipeline {
                 sarif(pattern: '**/*.sarif')
             ]
         }
-        failure {
-            echo 'Build failed. Rolling back...'
-            bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" undo go-demo'
-        }
+        // failure {
+        //     echo 'Build failed. Rolling back...'
+        //     bat '"C:\\Program Files (x86)\\kubectl-argo-rollouts\\kubectl-argo-rollouts.exe" undo go-demo'
+        // }
     }
 }
